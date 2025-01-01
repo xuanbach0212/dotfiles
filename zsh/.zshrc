@@ -172,3 +172,7 @@ else
 fi
 
 alias n="nvim"
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
+
+# Git commit with custom date
