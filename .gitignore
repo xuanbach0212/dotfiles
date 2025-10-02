@@ -1,0 +1,14 @@
+# Neovim
+nvim/lazy-lock.json
+nvim/.luarc.json
+
+# macOS
+.DS_Store
+
+# Backup files
+*.bak
+*.backup
+
+# History files
+.zsh_history
+.bash_history
