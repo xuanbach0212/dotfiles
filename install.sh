@@ -44,6 +44,7 @@ backup_if_exists ~/.wezterm.lua
 backup_if_exists ~/.zshrc
 backup_if_exists ~/.p10k.zsh
 backup_if_exists ~/.config/git/ignore
+backup_if_exists ~/.tmux.conf
 
 # Create symlinks
 echo ""
@@ -53,6 +54,7 @@ create_symlink ~/dotfiles/yazi ~/.config/yazi
 create_symlink ~/dotfiles/wezterm/.wezterm.lua ~/.wezterm.lua
 create_symlink ~/dotfiles/zsh/.zshrc ~/.zshrc
 create_symlink ~/dotfiles/zsh/.p10k.zsh ~/.p10k.zsh
+create_symlink ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 
 # Git global ignore
 mkdir -p ~/.config/git
