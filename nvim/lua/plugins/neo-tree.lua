@@ -21,6 +21,14 @@ return {
     close_if_last_window = true,
     enable_git_status = true,
     enable_diagnostics = true,
+    window = {
+      mappings = {
+        ["l"] = "open",
+        ["h"] = "close_node",
+        ["<CR>"] = "open",
+        ["<space>"] = "none",
+      },
+    },
     filesystem = {
       follow_current_file = {
         enabled = true,
