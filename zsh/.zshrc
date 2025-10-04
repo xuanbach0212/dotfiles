@@ -131,7 +131,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 export PATH="$HOME/.pyenv/bin:$PATH"
