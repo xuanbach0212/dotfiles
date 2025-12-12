@@ -176,3 +176,6 @@ alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
 
 # Git commit with custom date
+
+# Solana CLI
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"

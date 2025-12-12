@@ -23,3 +23,7 @@ vim.opt.tabstop = 4            -- Tab width (4 spaces display)
 vim.opt.softtabstop = 4        -- Backspace removes 4 spaces
 vim.opt.smartindent = true     -- Auto-indent new lines
 vim.opt.autoindent = true      -- Copy indent from current line
+
+-- Enable spell check for English
+vim.opt.spell = true
+vim.opt.spelllang = "en_us"
