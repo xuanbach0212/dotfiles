@@ -83,6 +83,7 @@ fi
 # Aliases
 # ------------------------------------------------------------------------------
 alias n="nvim"
+alias yz="yazi"
 
 if [[ -n "$IS_MAC" ]]; then
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"

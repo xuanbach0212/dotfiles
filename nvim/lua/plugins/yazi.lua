@@ -1,7 +1,9 @@
 return {
   {
     "mikavilpas/yazi.nvim",
-    keys = {},
+    keys = {
+      { "<leader>yz", "<cmd>Yazi<cr>", desc = "Open Yazi" },
+    },
     opts = {
       open_for_directories = false,
       change_neovim_cwd_on_close = true,
