@@ -16,7 +16,7 @@ config.font = wezterm.font_with_fallback({
 -- config.initial_rows = 28
 
 -- or, changing the font size and color scheme.
-config.font_size = 13.5
+config.font_size = 11.5
 
 config.color_scheme = "catppuccin-macchiato"
 -- config.color_scheme = "Tokyo Night Moon"
@@ -29,4 +29,14 @@ config.enable_tab_bar = false
 -- config.macos_window_background_blur = 10
 
 -- Finally, return the configuration to wezterm:
+
+-- setup wsl if windows
+if wezterm.target_triple:find("windows") then
+	for _, domain in ipairs(wezterm.default_wsl_domains()) do
+		config.default_domain = domain.name
+		config.default_cwd = "~"
+		break
+	end
+end
+
 return config

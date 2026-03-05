@@ -113,36 +113,53 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source "$HOME/.rye/env"
+# OS Detection
+# ------------------------------------------------------------------------------
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  IS_MAC=1
+elif [[ -n "$WSL_DISTRO_NAME" || "$(uname -r)" == *microsoft* ]]; then
+  IS_WSL=1
+  IS_LINUX=1
+else
+  IS_LINUX=1
+fi
+
+# rye (Python package manager)
+# ------------------------------------------------------------------------------
+[[ -f "$HOME/.rye/env" ]] && source "$HOME/.rye/env"
 export PATH="$HOME/.rye/shims:$PATH"
 
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# bun completions
-[ -s "/Users/s29815/.bun/_bun" ] && source "/Users/s29815/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# snowflake
-alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
-
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-
+# pyenv
+# ------------------------------------------------------------------------------
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
-export PATH=$PATH:/usr/local/go/bin
-export PATH="/opt/homebrew/opt/lua/bin:$PATH"
-export PATH="/opt/homebrew/opt/luarocks/bin:$PATH"
+# NVM (Node Version Manager)
+# ------------------------------------------------------------------------------
+export NVM_DIR="$HOME/.nvm"
+if [[ -n "$IS_MAC" ]]; then
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+else
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+fi
 
+# PATH additions
+# ------------------------------------------------------------------------------
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:/usr/local/go/bin"
+
+if [[ -n "$IS_MAC" ]]; then
+  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+  export PATH="/opt/homebrew/opt/lua/bin:$PATH"
+  export PATH="/opt/homebrew/opt/luarocks/bin:$PATH"
+fi
+
+# fzf
+# ------------------------------------------------------------------------------
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 
 # eza (better `ls`)
 # ------------------------------------------------------------------------------
@@ -171,9 +188,18 @@ else
   echo ERROR: Could not load zoxide shell integration.
 fi
 
+# Aliases
+# ------------------------------------------------------------------------------
 alias n="nvim"
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
+if [[ -n "$IS_MAC" ]]; then
+  alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+fi
+
+if [[ -n "$IS_LINUX" ]]; then
+  # fd is installed as fdfind on Ubuntu/Debian
+  type fdfind &>/dev/null && alias fd="fdfind"
+fi
 
 # Git commit with custom date
 
