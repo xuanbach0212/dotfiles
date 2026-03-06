@@ -200,3 +200,5 @@ fi
 
 # Solana CLI
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+[[ -s "/home/tyler/.gvm/scripts/gvm" ]] && source "/home/tyler/.gvm/scripts/gvm"
