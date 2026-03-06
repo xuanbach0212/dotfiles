@@ -129,11 +129,6 @@ fi
 [[ -f "$HOME/.rye/env" ]] && source "$HOME/.rye/env"
 export PATH="$HOME/.rye/shims:$PATH"
 
-# pyenv
-# ------------------------------------------------------------------------------
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
 
 # NVM (Node Version Manager)
 # ------------------------------------------------------------------------------
