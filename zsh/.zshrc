@@ -28,6 +28,10 @@ else
   IS_LINUX=1
 fi
 
+# Rye (Python package manager)
+# ------------------------------------------------------------------------------
+[[ -f "$HOME/.rye/env" ]] && source "$HOME/.rye/env"
+
 # NVM (Node Version Manager)
 # ------------------------------------------------------------------------------
 export NVM_DIR="$HOME/.nvm"
@@ -36,14 +40,14 @@ export NVM_DIR="$HOME/.nvm"
 
 # PATH additions
 # ------------------------------------------------------------------------------
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
 if [[ -n "$IS_MAC" ]]; then
   export PATH="/opt/homebrew/bin:$PATH"
   export PATH="/opt/homebrew/opt/lua/bin:$PATH"
   export PATH="/opt/homebrew/opt/luarocks/bin:$PATH"
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
-
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 # fzf
 # ------------------------------------------------------------------------------
