@@ -1,3 +1,5 @@
+Include /Users/s29815/.colima/ssh_config
+
 # Personal GitHub
 Host github-personal
     HostName github.com
