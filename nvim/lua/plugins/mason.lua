@@ -4,7 +4,6 @@ return {
     opts = {
       ensure_installed = {
         -- Python
-        "pyright",
         "ruff",
         "debugpy",
 
