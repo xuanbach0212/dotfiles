@@ -4,7 +4,7 @@ return {
     completion = {
       list = {
         selection = {
-          preselect = false, -- Don't auto-select first item, Enter = new line
+          preselect = true, -- Auto-select first item in dropdown
         },
       },
     },
