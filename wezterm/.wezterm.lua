@@ -19,6 +19,9 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 11.5
 
 config.color_scheme = "catppuccin-macchiato"
+
+-- Invert colors at cursor so the character inside is always visible
+config.force_reverse_video_cursor = true
 -- config.color_scheme = "Tokyo Night Moon"
 
 config.enable_tab_bar = true

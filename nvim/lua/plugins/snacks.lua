@@ -8,6 +8,6 @@ return {
     scratch = { enabled = true },
   },
   keys = {
-    { "<leader>bs", function() Snacks.scratch() end, desc = "Scratch Buffer" },
+    { "<leader>bs", function() Snacks.scratch({ ft = "markdown" }) end, desc = "Scratch Buffer" },
   },
 }
