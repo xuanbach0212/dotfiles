@@ -28,15 +28,42 @@ else
   IS_LINUX=1
 fi
 
-# Rye (Python package manager)
-# ------------------------------------------------------------------------------
-[[ -f "$HOME/.rye/env" ]] && source "$HOME/.rye/env"
+# uv (Python package manager) - uses ~/.local/bin, already in PATH below
 
-# NVM (Node Version Manager)
+# Editor
+# ------------------------------------------------------------------------------
+export EDITOR=nvim
+export VISUAL=nvim
+
+# NVM (Node Version Manager) - lazy loaded for faster shell startup
 # ------------------------------------------------------------------------------
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+nvm() {
+  unset -f nvm node npm npx yarn
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() {
+  unset -f nvm node npm npx yarn
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  node "$@"
+}
+npm() {
+  unset -f nvm node npm npx yarn
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  npm "$@"
+}
+npx() {
+  unset -f nvm node npm npx yarn
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  npx "$@"
+}
+yarn() {
+  unset -f nvm node npm npx yarn
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  yarn "$@"
+}
 
 # PATH additions
 # ------------------------------------------------------------------------------
@@ -72,14 +99,6 @@ else
   echo ERROR: eza could not be found. Skip setting up eza aliases.
 fi
 
-# zoxide (better `cd`)
-# ------------------------------------------------------------------------------
-if type zoxide &>/dev/null; then
-  eval "$(zoxide init zsh --cmd cd)"
-else
-  echo ERROR: Could not load zoxide shell integration.
-fi
-
 # Aliases
 # ------------------------------------------------------------------------------
 alias n="nvim"
@@ -100,3 +119,11 @@ fi
 # GVM (Go Version Manager)
 # ------------------------------------------------------------------------------
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+# zoxide (better `cd`) - must be at end of zshrc
+# ------------------------------------------------------------------------------
+if type zoxide &>/dev/null; then
+  eval "$(zoxide init zsh --cmd cd)"
+else
+  echo ERROR: Could not load zoxide shell integration.
+fi
