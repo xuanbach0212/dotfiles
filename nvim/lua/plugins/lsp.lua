@@ -6,10 +6,6 @@ return {
       inlay_hints = {
         enabled = false,
       },
-      servers = {
-        -- lang.python extra enables pyright by default; disable it here
-        pyright = { enabled = false },
-      },
     },
   },
 

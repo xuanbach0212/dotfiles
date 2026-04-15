@@ -27,3 +27,9 @@ vim.opt.autoindent = true      -- Copy indent from current line
 -- Enable spell check for English
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
+
+-- Faster LSP/gitsigns/diagnostic response
+vim.opt.updatetime = 300
+
+-- Keep 8 lines visible above/below cursor when scrolling
+vim.opt.scrolloff = 8
