@@ -38,6 +38,11 @@ export VISUAL=nvim
 # NVM (Node Version Manager) - lazy loaded for faster shell startup
 # ------------------------------------------------------------------------------
 export NVM_DIR="$HOME/.nvm"
+# Expose default node binary to PATH so tools like Copilot and pyright can find it
+if [[ -d "$NVM_DIR/versions/node" ]]; then
+  local _nvm_node=$(ls -t "$NVM_DIR/versions/node" | head -1)
+  [[ -n "$_nvm_node" ]] && export PATH="$NVM_DIR/versions/node/$_nvm_node/bin:$PATH"
+fi
 nvm() {
   unset -f nvm node npm npx yarn
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
