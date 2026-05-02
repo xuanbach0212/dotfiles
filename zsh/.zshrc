@@ -28,7 +28,11 @@ else
   IS_LINUX=1
 fi
 
-# uv (Python package manager) - uses ~/.local/bin, already in PATH below
+# pyenv (Python version manager - global)
+# ------------------------------------------------------------------------------
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # Editor
 # ------------------------------------------------------------------------------
