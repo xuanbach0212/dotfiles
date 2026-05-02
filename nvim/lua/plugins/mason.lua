@@ -6,6 +6,7 @@ return {
         -- Python
         "ruff",
         "debugpy",
+        "basedpyright",
 
         -- Go
         "gopls",
@@ -22,11 +23,16 @@ return {
 
         -- JavaScript / TypeScript
         "vtsls",
+        "tsgo",
         "eslint_d",
+        "oxlint",
         "prettier",
+        "biome",
+        "oxfmt",
         "js-debug-adapter",
 
         -- Infra / DevOps
+        "actionlint",
         "terraform-ls",
         "tflint",
         "dockerfile-language-server",
@@ -44,6 +50,7 @@ return {
         "markdown-toc",
 
         -- Shell / Lua
+        "tree-sitter-cli",
         "bash-language-server",
         "shellcheck",
         "shfmt",
@@ -56,6 +63,9 @@ return {
         -- Frontend extras
         "tailwindcss-language-server",
         "prisma-language-server",
+
+        -- Makefile
+        "mbake",
       },
     },
   },
