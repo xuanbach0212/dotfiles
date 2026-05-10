@@ -30,7 +30,7 @@ config.hide_tab_bar_if_only_one_tab = true
 config.native_macos_fullscreen_mode = false
 -- config.window_decorations = "NONE"
 
--- config.window_background_opacity = 0.9
+config.window_background_opacity = 0.8
 -- config.macos_window_background_blur = 10
 
 -- Finally, return the configuration to wezterm:

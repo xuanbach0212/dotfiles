@@ -136,3 +136,6 @@ if type zoxide &>/dev/null; then
 else
   echo ERROR: Could not load zoxide shell integration.
 fi
+
+# Wayland
+export MOZ_ENABLE_WAYLAND=1

@@ -4,14 +4,15 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     opts = {
-      flavour = "macchiato", -- latte, frappe, macchiato, mocha
+      flavour = "mocha", -- latte, frappe, macchiato, mocha
+      transparent_background = true,
     },
   },
   -- LazyVim colorscheme setup
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "catppuccin",
+      colorscheme = "catppuccin-nvim",
     },
   },
 }
