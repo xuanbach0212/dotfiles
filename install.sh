@@ -38,6 +38,7 @@ mkdir -p ~/.config
 # Backup existing configs
 echo ""
 echo "📦 Backing up existing configs..."
+backup_if_exists ~/.config/ghostty
 backup_if_exists ~/.config/nvim
 backup_if_exists ~/.config/yazi
 backup_if_exists ~/.wezterm.lua
@@ -49,6 +50,7 @@ backup_if_exists ~/.tmux.conf
 # Create symlinks
 echo ""
 echo "🔗 Creating symlinks..."
+create_symlink ~/dotfiles/ghostty ~/.config/ghostty
 create_symlink ~/dotfiles/nvim ~/.config/nvim
 create_symlink ~/dotfiles/yazi ~/.config/yazi
 create_symlink ~/dotfiles/wezterm/.wezterm.lua ~/.wezterm.lua
