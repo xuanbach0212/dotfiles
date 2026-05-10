@@ -1,0 +1,25 @@
+notebook > header {
+  background-color: #1e1e2e;
+  border: none;
+  box-shadow: none;
+}
+
+notebook > header > tabs > tab {
+  background-color: #1e1e2e;
+  color: #6c7086;
+  border: none;
+  border-radius: 0;
+  padding: 4px 16px;
+  margin: 0;
+}
+
+notebook > header > tabs > tab:checked {
+  background-color: #1e1e2e;
+  color: #cdd6f4;
+  box-shadow: inset 0 -2px 0 #cba6f7;
+}
+
+notebook > header > tabs > tab:hover:not(:checked) {
+  background-color: #313244;
+  color: #cdd6f4;
+}

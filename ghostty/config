@@ -6,10 +6,11 @@ font-size = 12
 
 background-opacity = 0.95
 
-window-decoration = false
-gtk-tabs-location = hidden
+cursor-style = block
+cursor-invert-fg-bg = true
+
 mouse-scroll-multiplier = 2
 
-window-padding-x = 12
-window-padding-y = 12
-
+window-decoration = false
+gtk-tabs-location = top
+gtk-custom-css = ~/.config/ghostty/ghostty.css
