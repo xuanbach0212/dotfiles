@@ -39,32 +39,43 @@ mkdir -p ~/.config
 echo ""
 echo "📦 Backing up existing configs..."
 backup_if_exists ~/.config/ghostty
+backup_if_exists ~/.config/lazygit
 backup_if_exists ~/.config/hypr
 backup_if_exists ~/.config/kitty
 backup_if_exists ~/.config/nvim
 backup_if_exists ~/.config/yazi
-backup_if_exists ~/.wezterm.lua
+backup_if_exists ~/.config/waybar
+backup_if_exists ~/.config/rofi
+backup_if_exists ~/.config/wezterm
+backup_if_exists ~/.config/tmux
 backup_if_exists ~/.zshrc
 backup_if_exists ~/.p10k.zsh
-backup_if_exists ~/.config/git/ignore
-backup_if_exists ~/.tmux.conf
 
 # Create symlinks
 echo ""
 echo "🔗 Creating symlinks..."
-create_symlink ~/dotfiles/ghostty ~/.config/ghostty
-create_symlink ~/dotfiles/hypr ~/.config/hypr
-create_symlink ~/dotfiles/kitty ~/.config/kitty
-create_symlink ~/dotfiles/nvim ~/.config/nvim
-create_symlink ~/dotfiles/yazi ~/.config/yazi
-create_symlink ~/dotfiles/wezterm/.wezterm.lua ~/.wezterm.lua
-create_symlink ~/dotfiles/zsh/.zshrc ~/.zshrc
-create_symlink ~/dotfiles/zsh/.p10k.zsh ~/.p10k.zsh
-create_symlink ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
+create_symlink ~/.dotfiles/ghostty ~/.config/ghostty
+create_symlink ~/.dotfiles/lazygit ~/.config/lazygit
+create_symlink ~/.dotfiles/hypr ~/.config/hypr
+create_symlink ~/.dotfiles/kitty ~/.config/kitty
+create_symlink ~/.dotfiles/nvim ~/.config/nvim
+create_symlink ~/.dotfiles/yazi ~/.config/yazi
+create_symlink ~/.dotfiles/wezterm ~/.config/wezterm
+create_symlink ~/.dotfiles/tmux ~/.config/tmux
+create_symlink ~/.dotfiles/zsh/.zshrc ~/.zshrc
+create_symlink ~/.dotfiles/zsh/.p10k.zsh ~/.p10k.zsh
+create_symlink ~/.dotfiles/waybar ~/.config/waybar
+create_symlink ~/.dotfiles/rofi ~/.config/rofi
+
+# local-bin scripts (symlink individually to preserve other ~/.local/bin entries)
+mkdir -p ~/.local/bin
+for f in ~/.dotfiles/local-bin/*; do
+  create_symlink "$f" ~/.local/bin/$(basename "$f")
+done
 
 # Git global ignore
 mkdir -p ~/.config/git
-create_symlink ~/dotfiles/git/ignore ~/.config/git/ignore
+create_symlink ~/.dotfiles/git/ignore ~/.config/git/ignore
 
 echo ""
 echo -e "${GREEN}✅ Dotfiles installed successfully!${NC}"
