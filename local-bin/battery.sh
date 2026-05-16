@@ -19,53 +19,62 @@ CHARGED_COLOR=""
 # Создаем директорию для флагов, если её нет
 mkdir -p "$FLAG_DIR"
 
+get_battery_paths() {
+    upower -e | grep 'BAT'
+}
+
 has_battery() {
-    local battery_path=$(upower -e | grep 'BAT')
-    [ -z "$battery_path" ] && return 1 || return 0
+    [ -z "$(get_battery_paths)" ] && return 1 || return 0
 }
 
 get_battery_charge() {
-    upower -i $(upower -e | grep 'BAT') | grep percentage | awk '{print $2}' | sed s/%//
+    local path="$1"
+    upower -i "$path" | grep percentage | awk '{print $2}' | sed s/%//
 }
 
 is_charging() {
-    upower -i $(upower -e | grep 'BAT') | grep state | awk '{print $2}'
+    local path="$1"
+    upower -i "$path" | grep state | awk '{print $2}'
 }
 
 notify_battery_time() {
-    local remaining_time=$(upower -i $(upower -e | grep 'BAT') | grep --color=never -E "time to empty|time to full" | awk '{print $4, $5}')
-    if [ -z "$remaining_time" ] || [[ "$remaining_time" == *"0"* ]]; then
-        notify-send "Battery Status" "Remaining time: data is being calculated or unavailable."
-    else
-        notify-send "Battery Status" "Remaining time: $remaining_time"
-    fi
+    local parts=()
+    local idx=0
+    local labels=("①" "②" "③" "④")
+    while IFS= read -r path; do
+        local label="${labels[$idx]}"
+        idx=$((idx + 1))
+        local charge=$(get_battery_charge "$path")
+        local state=$(is_charging "$path")
+        local remaining=$(upower -i "$path" | grep --color=never -E "time to empty|time to full" | awk '{print $4, $5}')
+
+        local state_label=""
+        case "$state" in
+            charging)       state_label="Charging" ;;
+            discharging)    state_label="Discharging" ;;
+            fully-charged)  state_label="Full" ;;
+            pending-charge) state_label="Pending charge" ;;
+            *)              state_label="$state" ;;
+        esac
+
+        if [ -n "$remaining" ] && [[ "$remaining" != *"0"* ]]; then
+            parts+=("$label ${charge}% — $state_label, $remaining left")
+        else
+            parts+=("$label ${charge}% — $state_label")
+        fi
+    done < <(get_battery_paths)
+    notify-send "Battery" "$(printf '%s\n' "${parts[@]}")"
 }
 
-print_status() {
-    local charge=$(get_battery_charge)
-    local charging_status=$(is_charging)
+get_battery_icon() {
+    local charge="$1"
+    local charging_status="$2"
     local icon=""
-    local color=""
-    local icon_only=false
-
-    for arg in "$@"; do
-        if [[ "$arg" == "--icon-only" ]]; then
-            icon_only=true
-        fi
-    done
-
     if [ "$charging_status" == "charging" ]; then
         icon="${CHARGING_ICONS[9]}"
-        color=$CHARGED_COLOR
     elif [ "$charging_status" == "fully-charged" ]; then
         icon="󰁹 "
-        color=$CHARGED_COLOR
     else
-        if [ "$charge" -le "15" ]; then
-            color=$DISCHARGED_COLOR
-        else
-            color=$CHARGED_COLOR
-        fi
         case $charge in
             100|9[0-9]) icon="󰁹 " ;;
             8[0-9]) icon="󰂂 " ;;
@@ -79,74 +88,95 @@ print_status() {
             *) icon="󰂎 " ;;
         esac
     fi
+    echo "$icon"
+}
 
-    local output=""
-    if $icon_only; then
-        output="$icon"
-    else
-        output="${icon}${charge}%"
-    fi
+print_status() {
+    local icon_only=false
+    for arg in "$@"; do
+        [[ "$arg" == "--icon-only" ]] && icon_only=true
+    done
 
-    if [[ -n "$color" ]]; then
-        if [[ "$SESSION_TYPE" == "wayland" ]]; then
-            echo "<span color=\"$color\">$output</span>"
-        elif [[ "$SESSION_TYPE" == "x11" ]]; then
-            echo "%{F$color}$output%{F-}"
+    local parts=()
+    while IFS= read -r path; do
+        local charge=$(get_battery_charge "$path")
+        local charging_status=$(is_charging "$path")
+        local icon=$(get_battery_icon "$charge" "$charging_status")
+        local color=""
+
+        if [ "$charging_status" == "charging" ] || [ "$charging_status" == "fully-charged" ]; then
+            color=$CHARGED_COLOR
+        elif [ "$charge" -le "15" ]; then
+            color=$DISCHARGED_COLOR
+        else
+            color=$CHARGED_COLOR
         fi
-    else
-        echo "$output"
-    fi
+
+        local output=""
+        if $icon_only; then
+            output="${icon}"
+        else
+            output="${icon}${charge}%"
+        fi
+
+        if [[ -n "$color" ]]; then
+            if [[ "$SESSION_TYPE" == "wayland" ]]; then
+                parts+=("<span color=\"$color\">$output</span>")
+            elif [[ "$SESSION_TYPE" == "x11" ]]; then
+                parts+=("%{F$color}$output%{F-}")
+            else
+                parts+=("$output")
+            fi
+        else
+            parts+=("$output")
+        fi
+    done < <(get_battery_paths)
+
+    local IFS=' '
+    echo "${parts[*]}"
 }
 
 check_battery_notifications() {
-    local battery_charge=$(get_battery_charge)
-    local charging_status=$(is_charging)
     local lock_file="$FLAG_DIR/.battery.lock"
-    
-    # Если началась зарядка, удаляем все флаги
-    if [ "$charging_status" == "charging" ]; then
-        rm -f "$FLAG_DIR"/*.flag 2>/dev/null
-        return
-    fi
-    
-    # Проверяем каждый порог
-    for threshold in "${BATTERY_THRESHOLDS[@]}"; do
-        local flag_file="$FLAG_DIR/battery_${threshold}.flag"
-        
-        if [ "$battery_charge" -le "$threshold" ]; then
-            # Используем flock для атомарной проверки и создания флага
-            (
-                flock -n 200 || exit 1
-                
-                # Повторная проверка внутри lock
-                if [ ! -f "$flag_file" ]; then
-                    local urgency="critical"
-                    local timeout=10000
-                    
-                    # Для 5% делаем чтобы уведомление не закрывалось
-                    if [ "$threshold" -eq 5 ]; then
-                        timeout=0 
-                    fi
 
-                    touch "$flag_file"
+    while IFS= read -r path; do
+        local bat_name=$(basename "$path")
+        local battery_charge=$(get_battery_charge "$path")
+        local charging_status=$(is_charging "$path")
 
-                    # Для 3% делаем чтобы ноутбук уходил в сон
-                    if [ "$threshold" -eq 3 ]; then
-                        sh ${XDG_BIN_HOME:-$HOME/bin}/screen-lock.sh --suspend
-                        exit 0
-                    fi 
-                    
-                    notify-send "Low battery charge" \
-                        "The battery charge level is $battery_charge%, connect the charger." \
-                        -u "$urgency" \
-                        -t "$timeout"
-                fi
-            ) 200>"$lock_file"
-        else
-            # Если заряд выше порога, удаляем соответствующий флаг
-            rm -f "$flag_file" 2>/dev/null
+        if [ "$charging_status" == "charging" ]; then
+            rm -f "$FLAG_DIR/${bat_name}_"*.flag 2>/dev/null
+            continue
         fi
-    done
+
+        for threshold in "${BATTERY_THRESHOLDS[@]}"; do
+            local flag_file="$FLAG_DIR/${bat_name}_${threshold}.flag"
+
+            if [ "$battery_charge" -le "$threshold" ]; then
+                (
+                    flock -n 200 || exit 1
+                    if [ ! -f "$flag_file" ]; then
+                        local urgency="critical"
+                        local timeout=10000
+                        if [ "$threshold" -eq 5 ]; then
+                            timeout=0
+                        fi
+                        touch "$flag_file"
+                        if [ "$threshold" -eq 3 ]; then
+                            sh ${XDG_BIN_HOME:-$HOME/bin}/screen-lock.sh --suspend
+                            exit 0
+                        fi
+                        notify-send "Low battery charge ($bat_name)" \
+                            "The battery charge level is $battery_charge%, connect the charger." \
+                            -u "$urgency" \
+                            -t "$timeout"
+                    fi
+                ) 200>"$lock_file"
+            else
+                rm -f "$flag_file" 2>/dev/null
+            fi
+        done
+    done < <(get_battery_paths)
 }
 
 main() {
