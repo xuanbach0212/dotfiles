@@ -3,11 +3,13 @@ show_hidden = true
 show_symlink = true
 
 [[plugin.prepend_fetchers]]
-id  = "git"
-url = "*"
-run = "git"
+id    = "git"
+group = "file"
+url   = "*"
+run   = "git"
 
 [[plugin.prepend_fetchers]]
-id  = "git"
-url = "*/"
-run = "git"
+id    = "git"
+group = "file"
+url   = "*/"
+run   = "git"
