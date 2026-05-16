@@ -113,7 +113,7 @@
     "return-type": "json",
     "format": "{}  ",
     "rotate": 0,
-    "interval": 2,
+    "interval": 5,
     "tooltip": true,
   },
   "custom/ram": {
@@ -121,7 +121,7 @@
     "return-type": "json",
     "format": "{}  ",
     "rotate": 0,
-    "interval": 2,
+    "interval": 5,
     "tooltip": true,
   },
   "custom/gpu": {
@@ -130,7 +130,7 @@
     "return-type": "json",
     "format": "{}",
     "rotate": 0,
-    "interval": 2,
+    "interval": 5,
     "tooltip": true,
   },
 
