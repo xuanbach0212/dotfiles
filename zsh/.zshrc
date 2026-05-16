@@ -139,3 +139,8 @@ fi
 
 # Wayland
 export MOZ_ENABLE_WAYLAND=1
+
+# Vietnamese input (ibus-bamboo)
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
