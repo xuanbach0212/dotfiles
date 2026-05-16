@@ -77,6 +77,22 @@ done
 mkdir -p ~/.config/git
 create_symlink ~/.dotfiles/git/ignore ~/.config/git/ignore
 
+# keyd (requires sudo — config lives in /etc/keyd/)
+echo ""
+echo "⌨️  Setting up keyd..."
+if command -v keyd &>/dev/null; then
+  if [ -L /etc/keyd/default.conf ]; then
+    sudo rm /etc/keyd/default.conf
+  elif [ -f /etc/keyd/default.conf ]; then
+    sudo mv /etc/keyd/default.conf /etc/keyd/default.conf.backup.$(date +%Y%m%d_%H%M%S)
+  fi
+  sudo ln -sf ~/.dotfiles/keyd/default.conf /etc/keyd/default.conf
+  sudo systemctl enable --now keyd
+  echo -e "${GREEN}Creating symlink: /etc/keyd/default.cfg -> ~/.dotfiles/keyd/default.cfg${NC}"
+else
+  echo -e "${YELLOW}keyd not installed, skipping. Install with: sudo pacman -S keyd${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}✅ Dotfiles installed successfully!${NC}"
 echo ""
