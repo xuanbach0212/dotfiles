@@ -2,7 +2,11 @@ return {
   {
     "mrjones2014/smart-splits.nvim",
     lazy = false,
-    build = "./kitty/install-kittens.bash",
+    build = "bash kitty/install-kittens.bash",
+    opts = {
+      multiplexer_integration = "kitty",
+      set_user_vars = true,
+    },
     keys = {
       {
         "<C-h>",
