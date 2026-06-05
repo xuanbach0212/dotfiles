@@ -45,7 +45,6 @@ return {
         -- Config / Docs
         "json-lsp",
         "taplo",
-        "markdownlint-cli2",
         "marksman",
         "markdown-toc",
 
