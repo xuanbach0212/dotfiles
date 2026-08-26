@@ -50,6 +50,7 @@ backup_if_exists ~/.config/wezterm
 backup_if_exists ~/.config/tmux
 backup_if_exists ~/.zshrc
 backup_if_exists ~/.p10k.zsh
+backup_if_exists ~/.tflint.hcl
 
 # Create symlinks
 echo ""
@@ -64,6 +65,7 @@ create_symlink ~/.dotfiles/wezterm ~/.config/wezterm
 create_symlink ~/.dotfiles/tmux ~/.config/tmux
 create_symlink ~/.dotfiles/zsh/.zshrc ~/.zshrc
 create_symlink ~/.dotfiles/zsh/.p10k.zsh ~/.p10k.zsh
+create_symlink ~/.dotfiles/tflint/.tflint.hcl ~/.tflint.hcl
 create_symlink ~/.dotfiles/waybar ~/.config/waybar
 create_symlink ~/.dotfiles/rofi ~/.config/rofi
 

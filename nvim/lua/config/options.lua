@@ -34,6 +34,11 @@ vim.opt.spelllang = "en_us"
 -- Faster LSP/gitsigns/diagnostic response
 vim.opt.updatetime = 300
 
+-- Don't let ~/.local/state/nvim/lsp.log grow unbounded (it hit 4GB from a
+-- stuck client spamming warnings). Turn back on with
+-- `:lua vim.lsp.set_log_level("debug")` when actually debugging an LSP issue.
+vim.lsp.set_log_level("off")
+
 -- Keep 8 lines visible above/below cursor when scrolling
 vim.opt.scrolloff = 8
 
